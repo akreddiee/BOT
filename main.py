@@ -38,6 +38,23 @@ app = FastAPI(
 )
 
 
+@app.get("/")
+async def root():
+    """Root endpoint welcome & service health pointer."""
+    return {
+        "service": settings.APP_NAME,
+        "version": settings.VERSION,
+        "status": "online",
+        "endpoints": {
+            "healthz": "/v1/healthz",
+            "metadata": "/v1/metadata",
+            "context": "/v1/context",
+            "tick": "/v1/tick",
+            "reply": "/v1/reply",
+        },
+    }
+
+
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     """Handle malformed request bodies with HTTP 400 per testing brief spec."""
